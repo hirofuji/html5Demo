@@ -1,0 +1,138 @@
+<!doctype html><html>
+<head>
+	<meta charset="utf-8">
+	<title>imgEditorSample</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+	<style>
+#canvasBase {
+	position: relative;
+	overflow: hidden;
+	width:600px;
+	height: 600px;
+	background-color: gray;
+	border: solid 1px #000;
+}
+canvas { position: absolute; }
+	</style>
+	<script>
+onload = function() {
+
+	var imgGrid = new Image();
+	imgGrid.src = "grid.png";
+	var imgMain = new Image();
+	imgMain.src = "br_4853.png";
+
+	var mainCanvas = document.getElementById('mainCanvas');
+	var mainContext = mainCanvas.getContext('2d');
+
+	var editorRect = {};
+	var hitObjects = new Array();
+
+	imgMain.onload = function() {
+		//setup editor rect
+		editorRect.l = mainCanvas.width/2 - imgMain.width/2;
+		editorRect.t = mainCanvas.height/2 - imgMain.height/2;
+		editorRect.w = imgMain.width;
+		editorRect.h = imgMain.height;
+
+		//draw Main
+		mainContext.drawImage(imgMain, editorRect.l, editorRect.t);
+
+		//draw grid
+		// var gridPattern = mainContext.createPattern(imgGrid, "repeat");
+		// mainContext.rect(editorRect.l, editorRect.t, editorRect.w, editorRect.h);
+		// mainContext.globalAlpha = 0.5;
+		// mainContext.fillStyle = gridPattern;
+		// mainContext.fill();
+		// mainContext.globalAlpha = 1;
+
+		//p1Canvas
+		var o = $('#imgPart1').position();
+		imgArea = {
+			t: editorRect.t + o.top
+			, l: editorRect.l + o.left
+			, w: o.width
+			, h: o.height
+		};
+		hitObjects.push(imgArea);
+		$('#imgPart1').css({top: imgArea.t, left: imgArea.l});
+
+		//p2Canvas
+		o = $('#imgPart2').position();
+		$('#imgPart2').css({top: editorRect.t + o.top, left: editorRect.l + o.left});
+
+		//setting mouse Events.
+		document.addEventListener('mousemove', function(e) {
+			console.log('spawn mousemove !! (' + e.clientX + ', ' + e.clientY + ')');
+		});
+	}
+
+	var imgP1 = new Image(); imgP1.src = "p3.png";
+	imgP1.onload = function() {
+		var p1cnt = document.getElementById('imgPart1').getContext('2d');
+		p1cnt.drawImage(imgP1, 0, 0);
+	}
+
+	var imgP2 = new Image(); imgP2.src = "p2.jpg";
+	imgP2.onload = function() {
+		var p2cnt = document.getElementById('imgPart2').getContext('2d');
+		p2cnt.drawImage(imgP2, 0, 0);
+	}
+}
+nload = function() {
+  // まず、canvas要素を検出する
+  canvas1 = document.getElementById('id_canvas1');
+  if (!canvas1 || !canvas1.getContext) {
+    alert("本ページの閲覧はHTML5対応ブラウザで行ってください");
+    return false;
+  }
+  ctx1 = canvas1.getContext('2d');
+  canvas2 = document.getElementById('id_canvas2');
+  ctx2 = canvas2.getContext('2d');
+  // 画像ファイルを表示
+  picture = new Image();
+  picture.onload = function() {ctx1.drawImage(picture,0,0);};
+  picture.src = "pic.png";
+  // インターバルタイマーでOverlayテキストをブリンク表示
+  stat = true;
+  overlay(ctx2,stat);
+  timerID = setInterval('timerfunc()',500);
+}
+function timerfunc() {
+  overlay(ctx2,stat);
+  if (stat) {
+    stat = false;
+  } else {
+    stat = true;
+  }
+}
+function overlay(ctx,drawtext) {
+  var str = "この動物は日本では猫と呼ばれています";
+  ctx.font = "bold 14px 'Times New Roman'";
+  tm = ctx.measureText(str);
+  var posx = (320-tm.width-20)/2;
+  var posy = 10;
+  ctx.fillStyle = "rgba(0,255,0,0.2)";
+  ctx.clearRect(posx,posy,tm.width+20,14+40);
+  ctx.fillRect(posx,posy,tm.width+20,14+40);
+  ctx.fillStyle = "rgb(255,255,255)";
+  ctx.beginPath();
+  ctx.strokeStyle = "rgb(255,255,0)";
+  ctx.rect(posx,posy,tm.width+20,14+40);
+  ctx.stroke();
+  if (drawtext) {
+    ctx.fillText(str,posx+10,posy+14+20);
+  }
+}
+	</script>
+</head>
+<body>
+	<p>hellow world</p>
+	<div id="canvasBase">
+		<canvas id="mainCanvas" width="600" height="600" style="z-index: 10;"></canvas>
+		<canvas id="imgPart1" width="266" height="195" style="top: 130px; left: 20px; z-index: 5;"></canvas>
+		<canvas id="imgPart2" width="130" height="180" style="top: 30px; left: 445px; z-index: 4;"></canvas>
+	</div>
+	<p>(c)fourtune Inc.</p>
+</body>
+</html>
