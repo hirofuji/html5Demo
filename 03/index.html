@@ -1,0 +1,53 @@
+<!doctype html><html>
+<head>
+	<meta charset="utf-8">
+	<title>imgEditorSample</title>
+	<script src="jquery.min.js"></script>
+</head>
+<body>
+
+<h1>Drag and Drops.</h1>
+<section id="s1">
+	<h3>ドロップ処理</h3>
+	<h3>addEventListner メソッド</h3>
+	<p>
+		<code>&lt;div ondrop="foo()"&gt;</code>とも書けるが、ブラウザ互換を考えて、<code>addEventLister</code>を使用する。
+	</p>
+	<script>
+		function tar_drop(e) {
+		}
+		$(function() {
+			var tar = document.getElementById("tar");
+			//event
+			tar.addEventListener("dragover", function(e){
+				e.preventDefault();
+				console.log("dragover!" + e);
+			}, true);
+			tar.addEventListener("drop", function(e) {
+				//デフォルト動作の抑制
+				e.preventDefault();
+				alert("fire drop event!")
+			}, true);
+		});
+	</script>
+	<style scoped>
+		#s1 div {width: 400px; height: 400px; background-color: #f00;}
+	</style>
+	<span id="t1_1">赤い部分にドロップしてください</span>
+	<div id="tar"></div>
+</section>
+<hr>
+<section id="s2">
+	<h3>ドラッグ処理</h3>
+	<p>
+		基本はElementに対して<c>draggable="true"</c>属性を設定するだけでドラッグ可能。
+	</p>
+	<style scoped>
+		#s2 div {width: 200px; height: 200px; background-color: #0f0;}
+	</style>
+	<div id="s2_tar" draggable="true"></div>
+</section>
+	<p>(c)fourtune Inc.</p>
+
+</body>
+</html>
